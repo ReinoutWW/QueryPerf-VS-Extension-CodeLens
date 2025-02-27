@@ -53,14 +53,14 @@ namespace MethodQueryUsageCodeLensProvider
                     string json = await response.Content.ReadAsStringAsync();
 
                     int count = ParseCountFromQuery(json);
-                    details.InvocationCount = count;
-                    details.TotalBytes = 0; // we don't track bytes from AI in this example
+                    details.QueryCount = count;
+                    details.TotalBytes_Total = 0; // we don't track bytes from AI in this example
                     details.AdditionalInfo = "(AI-based data)";
                 }
             }
             catch (Exception ex)
             {
-                details.InvocationCount = 0;
+                details.QueryCount = 0;
                 details.AdditionalInfo = $"(AI error: {ex.Message})";
             }
 
