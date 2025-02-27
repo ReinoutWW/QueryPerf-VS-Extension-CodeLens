@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="CodeLensQueryPerformance.c3be1bdb-f94f-4862-a297-254d8f8a3f66" Version="2.0" Language="en-US" Publisher="R. Wijnholds" />
+        <Identity Id="CodeLensQueryPerformance.c3be1bdb-f94f-4862-a297-254d8f8a3f66" Version="2.1" Language="en-US" Publisher="R. Wijnholds" />
         <DisplayName>CodeLens Query Performance</DisplayName>
         <Description xml:space="preserve">Show query performance using CodeLense. </Description>
+        <Icon>QueryPerformance.png</Icon>
+        <PreviewImage>QueryPerformance.png</PreviewImage>
+        <Tags>Performance, Query Optimizer, Insights, Data</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
