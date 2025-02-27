@@ -106,5 +106,5 @@ This project is released as a **demo**. Check the accompanying license file (if 
 
 **Happy coding!** For any inquiries or bug reports, please open an issue or contact the project maintainer.
 
-![Logo](https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png)
+![Logo](https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png|width=250px)
 
