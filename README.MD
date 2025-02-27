@@ -11,6 +11,11 @@ A **Visual Studio 2022 Extension** that displays query performance statistics in
 - **Identification**: Each row in the dataset corresponds to a specific “tag” (namespace + class + method signature).
 - **Future**: An automatic connection to Azure Application Insights is planned for live, dynamic data.
 
+## Preview
+
+<img src="https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/PerfPreview.png" alt="Example Image" width="500">
+*CodeLens Query Performance Extension Preview*
+
 ## How It Works
 
 1. **Tag Detection**  
