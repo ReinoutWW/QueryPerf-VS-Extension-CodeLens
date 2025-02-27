@@ -2,6 +2,8 @@
 
 A **Visual Studio 2022 Extension** that displays query performance statistics in the editor, leveraging **CodeLens**. The extension reads saved data (e.g., from a CSV file) to show **execution time**, **bytes sent/received**, **row counts**, **column counts**, and more—directly above each method in your source code.
 
+<img src="https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png" alt="Example Image" width="300">
+
 ## Overview
 
 - **Purpose**: Give developers immediate insight into performance metrics at the method level, without leaving the IDE.
@@ -105,8 +107,3 @@ This project is released as a **demo**. Check the accompanying license file (if 
 ---
 
 **Happy coding!** For any inquiries or bug reports, please open an issue or contact the project maintainer.
-
-<img src="https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png" alt="Example Image" width="300">
-
-![Logo](https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png|width=250px)
-
