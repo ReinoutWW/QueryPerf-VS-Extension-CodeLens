@@ -13,7 +13,7 @@ A **Visual Studio 2022 Extension** that displays query performance statistics in
 
 ## Preview
 
-<img src="https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/PerfPreview.png" alt="Example Image" width="500">
+<img src="https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/PerfPreview.png" alt="Example Image" width="550">
 *CodeLens Query Performance Extension Preview*
 
 ## How It Works
