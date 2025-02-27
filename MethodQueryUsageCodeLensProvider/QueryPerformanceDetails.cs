@@ -8,30 +8,56 @@ namespace MethodQueryUsageCodeLensProvider
 {
     public class QueryPerformanceDetails
     {
-        public long InvocationCount { get; set; }
-        public long TotalBytes { get; set; }
+        // --- CSV columns from KQL ---
+        public string Tag { get; set; }
+
+        public long QueryCount { get; set; }
         public long UniqueUserCount { get; set; }
+
+        // BytesSent
+        public long BytesSent_Min { get; set; }
+        public long BytesSent_Max { get; set; }
+        public double BytesSent_Avg { get; set; }
+        public long BytesSent_Total { get; set; }
+
+        // BytesReceived
+        public long BytesReceived_Min { get; set; }
+        public long BytesReceived_Max { get; set; }
+        public double BytesReceived_Avg { get; set; }
+        public long BytesReceived_Total { get; set; }
+
+        // TotalBytes
+        public long TotalBytes_Min { get; set; }
+        public long TotalBytes_Max { get; set; }
+        public double TotalBytes_Avg { get; set; }
+        public long TotalBytes_Total { get; set; }
+
+        // Rows
+        public long Rows_Min { get; set; }
+        public long Rows_Max { get; set; }
+        public double Rows_Avg { get; set; }
+        public long Rows_Total { get; set; }
+
+        // Columns
+        public long Columns_Min { get; set; }
+        public long Columns_Max { get; set; }
+        public double Columns_Avg { get; set; }
+        public long Columns_Total { get; set; }
+
+        // ExecutionTime
+        public long ExecutionTime_Min { get; set; }
+        public long ExecutionTime_Max { get; set; }
+        public double ExecutionTime_Avg { get; set; }
+        public long ExecutionTime_Total { get; set; }
+
         public string AdditionalInfo { get; set; }
 
         public override string ToString()
         {
-            // For quick display, adapt as needed
-            return $"Invocations: {InvocationCount}, Bytes: {BytesToReadableString(TotalBytes)}, Unique Users: {UniqueUserCount}";
-        }
-
-        public static string BytesToReadableString(long bytes)
-        {
-            if (bytes < 0)
-                throw new ArgumentException("Bytes cannot be negative", nameof(bytes));
-            if (bytes == 0)
-                return "0B";
-
-            // Use base-1000 for conversion.
-            string[] units = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
-            int unitIndex = (int)Math.Floor(Math.Log(bytes, 1000));
-            double adjustedSize = bytes / Math.Pow(1000, unitIndex);
-
-            return $"{adjustedSize:0.#}{units[unitIndex]}";
+            return $"Query's logged: {QueryCount} | "
+                 + $"Processed bytes: {ValueFormatHelper.BytesToReadableStringDouble(TotalBytes_Total)} | "
+                 + $"Unique Users: {UniqueUserCount}";
         }
     }
+
 }
