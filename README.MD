@@ -1,7 +1,7 @@
 # CodeLens Query Performance - V2
 Show query performance directly at the method itself, leveraging CodeLens to get direct insights
 
-![https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png]
+![Logo](https://github.com/ReinoutWW/QueryPerf-VS-Extension-CodeLens/blob/master/CodeLensQueryPerformance/QueryPerformance.png)
 
 As it's a demo version, a dataset should be directly at this directory: `C:\CodeLens\CodeLensSourceData3.csv`
 
