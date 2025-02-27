@@ -13,7 +13,7 @@ namespace MethodQueryUsageCodeLensProvider
         private readonly CodeLensDescriptor _descriptor;
         public event AsyncEventHandler InvalidatedAsync;
 
-        private static readonly IUsageQueryService _queryService = new LocalDataQueryService("<csv code source path here>");
+        private static readonly IUsageQueryService _queryService = new LocalDataQueryService("C:\\CodeLens\\CodeLensSourceData.csv");
 
         public MethodQueryUsageDataPoint(CodeLensDescriptor descriptor)
         {
@@ -38,8 +38,8 @@ namespace MethodQueryUsageCodeLensProvider
 
             var descriptorData = new CodeLensDataPointDescriptor
             {
-                Description = description,
-                TooltipText = "Src: " + _descriptor.ElementDescription
+                Description = details.ToString(),
+                TooltipText = details.AdditionalInfo
             };
             return descriptorData;
         }

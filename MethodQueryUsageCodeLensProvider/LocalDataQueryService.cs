@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MethodQueryUsageCodeLensProvider
@@ -18,54 +17,58 @@ namespace MethodQueryUsageCodeLensProvider
 
         public Task<QueryPerformanceDetails> GetMethodPerformanceDetailsAsync(string methodSignature)
         {
+            // Safely trim the incoming signature to avoid null issues
             methodSignature = methodSignature?.Trim() ?? string.Empty;
 
-            var kvp = _dataStore.FirstOrDefault(pair =>
-                IsPartialMatch(methodSignature, pair.Key));
+            // Try to find a matching entry in the dictionary
+            var matchingEntry = _dataStore.FirstOrDefault(
+                entry => entry.Key.Contains(methodSignature)
+            );
 
-            if (!kvp.Equals(default(KeyValuePair<string, QueryPerformanceDetails>)))
+            // If we found a valid match (the Key won't be null in that case)
+            if (!string.IsNullOrEmpty(matchingEntry.Key))
             {
-                return Task.FromResult(kvp.Value);
+                return Task.FromResult(matchingEntry.Value);
             }
 
+            // Otherwise, return a "default" performance object
             return Task.FromResult(new QueryPerformanceDetails
             {
                 InvocationCount = 0,
                 TotalBytes = 0,
-                AdditionalInfo = "(No local CSV data found / partial match failed)"
+                UniqueUserCount = 0,
+                AdditionalInfo = $"(No local CSV data found / partial match failed)"
             });
         }
 
         private Dictionary<string, QueryPerformanceDetails> LoadData(string csvFilePath)
         {
-            var result = new Dictionary<string, QueryPerformanceDetails>(StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<string, QueryPerformanceDetails>(
+                StringComparer.OrdinalIgnoreCase
+            );
 
+            // If no file, return empty
             if (!File.Exists(csvFilePath))
                 return result;
 
+            // Skip header row
             var lines = File.ReadAllLines(csvFilePath).Skip(1);
 
             foreach (var line in lines)
             {
+                // Basic sanity check
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
                 var parts = line.Split(',');
-                if (parts.Length < 2)
-                    continue;
+                // We expect at least 4 columns: Tag, sumBytes, uniqueUserCount, queryCount
+                if (parts.Length < 4) continue;
 
                 string tag = parts[0].Trim();
-                if (!long.TryParse(parts[1].Trim(), out long sumBytes))
-                {
-                    sumBytes = 0;
-                }
-                if (!long.TryParse(parts[2].Trim(), out long uniqueUserCount))
-                {
-                    uniqueUserCount = 0;
-                }
-                if (!long.TryParse(parts[3].Trim(), out long queryCount))
-                {
-                    queryCount = 0;
-                }
+                if (!long.TryParse(parts[1].Trim(), out long sumBytes)) sumBytes = 0;
+                if (!long.TryParse(parts[2].Trim(), out long uniqueUserCount)) uniqueUserCount = 0;
+                if (!long.TryParse(parts[3].Trim(), out long queryCount)) queryCount = 0;
 
-                // Create a new details object
+                // Create the details object
                 var details = new QueryPerformanceDetails
                 {
                     InvocationCount = queryCount,
@@ -74,31 +77,14 @@ namespace MethodQueryUsageCodeLensProvider
                     AdditionalInfo = "(Local CSV data)"
                 };
 
-
-                result[tag] = details;
+                // Store it
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    result[tag] = details;
+                }
             }
 
             return result;
         }
-
-        /// <summary>
-        /// Returns true if:
-        /// 1) One string equals the other (case-insensitive), OR
-        /// 2) One string ends with the other. E.g., 
-        ///    "Common.FileService.UpdateCamasFileAsync" ends with "FileService.UpdateCamasFileAsync"
-        /// </summary>
-        private bool IsPartialMatch(string s1, string s2)
-        {
-            if (string.Equals(s1, s2, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            if (s1.EndsWith(s2, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            if (s2.EndsWith(s1, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            return false;
-        }
-    }
+    }    
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="CodeLensQueryPerformance.c3be1bdb-f94f-4862-a297-254d8f8a3f66" Version="1.0" Language="en-US" Publisher="Company" />
-        <DisplayName>CodeLensQueryPerformance</DisplayName>
+        <Identity Id="CodeLensQueryPerformance.c3be1bdb-f94f-4862-a297-254d8f8a3f66" Version="1.0" Language="en-US" Publisher="R. Wijnholds" />
+        <DisplayName>CodeLens Query Performance</DisplayName>
         <Description>Empty VSIX Project.</Description>
     </Metadata>
     <Installation>
