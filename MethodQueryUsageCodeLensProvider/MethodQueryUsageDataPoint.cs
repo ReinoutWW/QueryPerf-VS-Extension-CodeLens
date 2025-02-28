@@ -31,13 +31,6 @@ namespace MethodQueryUsageCodeLensProvider
 
             QueryPerformanceDetails details = await _queryService.GetMethodPerformanceDetailsAsync(methodSignature);
 
-            string description = string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(details.AdditionalInfo))
-            {
-                description += details.ToString();
-            }
-
             var descriptorData = new CodeLensDataPointDescriptor
             {
                 Description = details.GetDisplayString(),
