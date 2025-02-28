@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MethodQueryUsageCodeLensProvider
@@ -133,5 +134,20 @@ namespace MethodQueryUsageCodeLensProvider
             return $"{bytes:0.##}{units[order]}";
         }
 
+        public static long GetLong(JsonElement row, Dictionary<string, int> columnMap, string colName)
+        {
+            if (!columnMap.ContainsKey(colName))
+                return 0;
+            JsonElement el = row[columnMap[colName]];
+            return el.ValueKind == JsonValueKind.Null ? 0 : el.GetInt64();
+        }
+
+        public static double GetDouble(JsonElement row, Dictionary<string, int> columnMap, string colName)
+        {
+            if (!columnMap.ContainsKey(colName))
+                return 0.0;
+            JsonElement el = row[columnMap[colName]];
+            return el.ValueKind == JsonValueKind.Null ? 0.0 : el.GetDouble();
+        }
     }
 }

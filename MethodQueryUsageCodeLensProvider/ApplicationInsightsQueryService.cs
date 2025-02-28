@@ -133,38 +133,38 @@ namespace MethodQueryUsageCodeLensProvider
 
             var details = new QueryPerformanceDetails
             {
-                QueryCount = GetLong(row, columnMap, "QueryCount"),
-                UniqueUserCount = GetLong(row, columnMap, "UniqueUserCount"),
+                QueryCount = ValueFormatHelper.GetLong(row, columnMap, "QueryCount"),
+                UniqueUserCount = ValueFormatHelper.GetLong(row, columnMap, "UniqueUserCount"),
 
-                BytesSent_Min = GetLong(row, columnMap, "BytesSent_Min"),
-                BytesSent_Max = GetLong(row, columnMap, "BytesSent_Max"),
-                BytesSent_Avg = GetDouble(row, columnMap, "BytesSent_Avg"),
-                BytesSent_Total = GetLong(row, columnMap, "BytesSent_Total"),
+                BytesSent_Min = ValueFormatHelper.GetLong(row, columnMap, "BytesSent_Min"),
+                BytesSent_Max = ValueFormatHelper.GetLong(row, columnMap, "BytesSent_Max"),
+                BytesSent_Avg = ValueFormatHelper.GetDouble(row, columnMap, "BytesSent_Avg"),
+                BytesSent_Total = ValueFormatHelper.GetLong(row, columnMap, "BytesSent_Total"),
 
-                BytesReceived_Min = GetLong(row, columnMap, "BytesReceived_Min"),
-                BytesReceived_Max = GetLong(row, columnMap, "BytesReceived_Max"),
-                BytesReceived_Avg = GetDouble(row, columnMap, "BytesReceived_Avg"),
-                BytesReceived_Total = GetLong(row, columnMap, "BytesReceived_Total"),
+                BytesReceived_Min = ValueFormatHelper.GetLong(row, columnMap, "BytesReceived_Min"),
+                BytesReceived_Max = ValueFormatHelper.GetLong(row, columnMap, "BytesReceived_Max"),
+                BytesReceived_Avg = ValueFormatHelper.GetDouble(row, columnMap, "BytesReceived_Avg"),
+                BytesReceived_Total = ValueFormatHelper.GetLong(row, columnMap, "BytesReceived_Total"),
 
-                TotalBytes_Min = GetLong(row, columnMap, "TotalBytes_Min"),
-                TotalBytes_Max = GetLong(row, columnMap, "TotalBytes_Max"),
-                TotalBytes_Avg = GetDouble(row, columnMap, "TotalBytes_Avg"),
-                TotalBytes_Total = GetLong(row, columnMap, "TotalBytes_Total"),
+                TotalBytes_Min = ValueFormatHelper.GetLong(row, columnMap, "TotalBytes_Min"),
+                TotalBytes_Max = ValueFormatHelper.GetLong(row, columnMap, "TotalBytes_Max"),
+                TotalBytes_Avg = ValueFormatHelper.GetDouble(row, columnMap, "TotalBytes_Avg"),
+                TotalBytes_Total = ValueFormatHelper.GetLong(row, columnMap, "TotalBytes_Total"),
 
-                Rows_Min = GetLong(row, columnMap, "Rows_Min"),
-                Rows_Max = GetLong(row, columnMap, "Rows_Max"),
-                Rows_Avg = GetDouble(row, columnMap, "Rows_Avg"),
-                Rows_Total = GetLong(row, columnMap, "Rows_Total"),
+                Rows_Min = ValueFormatHelper.GetLong(row, columnMap, "Rows_Min"),
+                Rows_Max = ValueFormatHelper.GetLong(row, columnMap, "Rows_Max"),
+                Rows_Avg = ValueFormatHelper.GetDouble(row, columnMap, "Rows_Avg"),
+                Rows_Total = ValueFormatHelper.GetLong(row, columnMap, "Rows_Total"),
 
-                Columns_Min = GetLong(row, columnMap, "Columns_Min"),
-                Columns_Max = GetLong(row, columnMap, "Columns_Max"),
-                Columns_Avg = GetDouble(row, columnMap, "Columns_Avg"),
-                Columns_Total = GetLong(row, columnMap, "Columns_Total"),
+                Columns_Min = ValueFormatHelper.GetLong(row, columnMap, "Columns_Min"),
+                Columns_Max = ValueFormatHelper.GetLong(row, columnMap, "Columns_Max"),
+                Columns_Avg = ValueFormatHelper.GetDouble(row, columnMap, "Columns_Avg"),
+                Columns_Total = ValueFormatHelper.GetLong(row, columnMap, "Columns_Total"),
 
-                ExecutionTime_Min = GetLong(row, columnMap, "ExecutionTime_Min"),
-                ExecutionTime_Max = GetLong(row, columnMap, "ExecutionTime_Max"),
-                ExecutionTime_Avg = GetDouble(row, columnMap, "ExecutionTime_Avg"),
-                ExecutionTime_Total = GetLong(row, columnMap, "ExecutionTime_Total")
+                ExecutionTime_Min = ValueFormatHelper.GetLong(row, columnMap, "ExecutionTime_Min"),
+                ExecutionTime_Max = ValueFormatHelper.GetLong(row, columnMap, "ExecutionTime_Max"),
+                ExecutionTime_Avg = ValueFormatHelper.GetDouble(row, columnMap, "ExecutionTime_Avg"),
+                ExecutionTime_Total = ValueFormatHelper.GetLong(row, columnMap, "ExecutionTime_Total")
             };
 
             return details;
@@ -174,7 +174,7 @@ namespace MethodQueryUsageCodeLensProvider
         /// Reads all column definitions in the 'columns' array
         /// and builds a map of { columnName -> columnIndex }.
         /// </summary>
-        private Dictionary<string, int> BuildColumnMap(JsonElement columnsArray)
+        private static Dictionary<string, int> BuildColumnMap(JsonElement columnsArray)
         {
             var map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             for (int i = 0; i < columnsArray.GetArrayLength(); i++)
@@ -186,31 +186,6 @@ namespace MethodQueryUsageCodeLensProvider
                 }
             }
             return map;
-        }
-
-        private string GetString(JsonElement row, Dictionary<string, int> columnMap, string colName)
-        {
-            if (!columnMap.ContainsKey(colName))
-                return "";
-            return row[columnMap[colName]].ValueKind == JsonValueKind.Null
-                ? ""
-                : row[columnMap[colName]].GetString() ?? "";
-        }
-
-        private long GetLong(JsonElement row, Dictionary<string, int> columnMap, string colName)
-        {
-            if (!columnMap.ContainsKey(colName))
-                return 0;
-            JsonElement el = row[columnMap[colName]];
-            return el.ValueKind == JsonValueKind.Null ? 0 : el.GetInt64();
-        }
-
-        private double GetDouble(JsonElement row, Dictionary<string, int> columnMap, string colName)
-        {
-            if (!columnMap.ContainsKey(colName))
-                return 0.0;
-            JsonElement el = row[columnMap[colName]];
-            return el.ValueKind == JsonValueKind.Null ? 0.0 : el.GetDouble();
         }
     }
 }
