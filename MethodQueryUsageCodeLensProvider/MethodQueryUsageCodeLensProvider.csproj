@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationInsightsQueryService.cs" />
+    <Compile Include="Extensions\CodeLensTextExtensions.cs" />
     <Compile Include="IUsageQueryService.cs" />
     <Compile Include="LocalDataQueryService.cs" />
     <Compile Include="MethodQueryUsageDataPoint.cs" />

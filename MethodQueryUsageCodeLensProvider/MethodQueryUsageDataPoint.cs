@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Language.CodeLens;
 using Microsoft.VisualStudio.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using MethodQueryUsageCodeLensProvider.Extensions;
 
 namespace MethodQueryUsageCodeLensProvider
 {
@@ -39,8 +40,8 @@ namespace MethodQueryUsageCodeLensProvider
 
             var descriptorData = new CodeLensDataPointDescriptor
             {
-                Description = details.ToString(),
-                TooltipText = details.Rows_Max.ToString()
+                Description = details.GetDisplayString(),
+                TooltipText = details.AdditionalInfo
             };
 
             return descriptorData;
