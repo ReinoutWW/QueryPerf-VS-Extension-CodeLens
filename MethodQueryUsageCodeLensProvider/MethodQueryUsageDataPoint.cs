@@ -41,7 +41,7 @@ namespace MethodQueryUsageCodeLensProvider
         }
 
         public async Task<CodeLensDetailsDescriptor> GetDetailsAsync(
-            CodeLensDescriptorContext context,
+            CodeLensDescriptorContext descriptorContext,
             CancellationToken token
         )
         {
