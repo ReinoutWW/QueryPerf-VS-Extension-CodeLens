@@ -1,25 +1,25 @@
 ﻿using Microsoft.VisualStudio.Language.CodeLens.Remoting;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.CodeLens;
 using Microsoft.VisualStudio.Threading;
 using System.Collections.Generic;
-using System.Linq;
 using MethodQueryUsageCodeLensProvider.Extensions;
 
 namespace MethodQueryUsageCodeLensProvider
 {
     internal class MethodQueryUsageDataPoint : IAsyncCodeLensDataPoint
     {
-        private readonly CodeLensDescriptor _descriptor;
         public event AsyncEventHandler InvalidatedAsync;
 
-        private static readonly IUsageQueryService _queryService = new LocalDataQueryService("C:\\CodeLens\\CodeLensSourceData3.csv");
+        private readonly CodeLensDescriptor _descriptor;
+        private readonly IUsageQueryService _queryService;
 
-        public MethodQueryUsageDataPoint(CodeLensDescriptor descriptor)
+        public MethodQueryUsageDataPoint(CodeLensDescriptor descriptor, string appId, string apiKey)
         {
             _descriptor = descriptor;
+
+            _queryService = new ApplicationInsightsQueryService(appId, apiKey);
         }
 
         public CodeLensDescriptor Descriptor => _descriptor;

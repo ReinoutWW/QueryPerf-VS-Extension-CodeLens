@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using System.IO;
 
 namespace MethodQueryUsageCodeLensProvider
 {
@@ -24,9 +26,41 @@ namespace MethodQueryUsageCodeLensProvider
 
         public Task<IAsyncCodeLensDataPoint> CreateDataPointAsync(CodeLensDescriptor descriptor, CodeLensDescriptorContext context, CancellationToken token)
         {
-            // Create our custom data point. We'll implement it in a separate class next.
-            IAsyncCodeLensDataPoint dataPoint = new MethodQueryUsageDataPoint(descriptor);
+            // Default values in case file isn't found
+            string appId = "MISSING";
+            string apiKey = "MISSING";
+
+            try
+            {
+                GetKeyConfigFromFile(ref appId, ref apiKey);
+            }
+            catch (Exception ex)
+            {
+                apiKey = $"Error: {ex.Message}";
+            }
+
+            IAsyncCodeLensDataPoint dataPoint = new MethodQueryUsageDataPoint(descriptor, appId, apiKey);
             return Task.FromResult(dataPoint);
+        }
+
+        private static void GetKeyConfigFromFile(ref string appId, ref string apiKey)
+        {
+            string configFolder = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "MethodQueryUsageCodeLensProvider");
+            string configFilePath = Path.Combine(configFolder, "config.txt");
+
+            if (File.Exists(configFilePath))
+            {
+                // We expect "AppId;ApiKey"
+                string contents = File.ReadAllText(configFilePath);
+                var parts = contents.Split(';');
+                if (parts.Length == 2)
+                {
+                    appId = parts[0];
+                    apiKey = parts[1];
+                }
+            }
         }
     }
 }
