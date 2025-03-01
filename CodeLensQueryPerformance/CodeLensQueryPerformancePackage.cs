@@ -25,6 +25,7 @@ namespace CodeLensQueryPerformance
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(CodeLensQueryPerformancePackage.PackageGuidString)]
+    [ProvideOptionPage(typeof(KeyConfigDialogPage), "CodeLens Query Performance", "General", 0, 0, supportsAutomation: true)]
     public sealed class CodeLensQueryPerformancePackage : AsyncPackage
     {
         /// <summary>
