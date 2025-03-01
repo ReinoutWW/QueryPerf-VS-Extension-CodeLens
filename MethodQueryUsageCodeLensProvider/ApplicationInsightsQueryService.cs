@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -13,6 +12,7 @@ namespace MethodQueryUsageCodeLensProvider
     {
         private readonly string _appId;
         private readonly string _apiKey;
+
         private static readonly HttpClient _httpClient = new HttpClient();
 
         private static readonly ConcurrentDictionary<string, (QueryPerformanceDetails details, DateTime fetchTime)> _cache
@@ -22,8 +22,8 @@ namespace MethodQueryUsageCodeLensProvider
 
         public ApplicationInsightsQueryService(string appId, string apiKey)
         {
-            _appId = appId ?? throw new ArgumentNullException(nameof(appId));
-            _apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+            _appId = appId;
+            _apiKey = apiKey;
         }
 
         public async Task<QueryPerformanceDetails> GetMethodPerformanceDetailsAsync(string methodSignature)
@@ -34,7 +34,42 @@ namespace MethodQueryUsageCodeLensProvider
                 return entry.details;
             }
 
-            string kustoQuery = $@"
+            string kustoQuery = GetKustoQuery(methodSignature);
+
+            string timespan = "P7D";
+            string url = $"https://api.applicationinsights.io/v1/apps/{_appId}/query" +
+                         $"?query={Uri.EscapeDataString(kustoQuery)}&timespan={timespan}";
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("x-api-key", _apiKey);
+
+            QueryPerformanceDetails details;
+            try
+            {
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                string json = await response.Content.ReadAsStringAsync();
+
+                details = ParseByColumnName(json);
+                details.Tag = methodSignature;
+                details.AdditionalInfo = $"Past 7d | Application Insights | Tag {methodSignature}";
+            }
+            catch (Exception ex)
+            {
+                details = new QueryPerformanceDetails
+                {
+                    Tag = methodSignature,
+                    AdditionalInfo = $"API error: {ex.Message})"
+                };
+            }
+
+            _cache[methodSignature] = (details, DateTime.UtcNow);
+            return details;
+        }
+
+        private static string GetKustoQuery(string methodSignature)
+        {
+            return $@"
             customEvents
             | where name == 'TelemetryEvent.Query.Intercepted'
             | extend 
@@ -79,36 +114,6 @@ namespace MethodQueryUsageCodeLensProvider
                 ExecutionTime_Total = sum(execTime)
               by Tag
             ";
-
-            string timespan = "P7D";
-            string url = $"https://api.applicationinsights.io/v1/apps/{_appId}/query" +
-                         $"?query={Uri.EscapeDataString(kustoQuery)}&timespan={timespan}";
-
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.Add("x-api-key", _apiKey);
-
-            QueryPerformanceDetails details;
-            try
-            {
-                HttpResponseMessage response = await _httpClient.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                string json = await response.Content.ReadAsStringAsync();
-
-                details = ParseByColumnName(json);
-                details.Tag = methodSignature;
-                details.AdditionalInfo = $"Past 7d | Application Insights | Tag {methodSignature}";
-            }
-            catch (Exception ex)
-            {
-                details = new QueryPerformanceDetails
-                {
-                    Tag = methodSignature,
-                    AdditionalInfo = $"(API error: {ex.Message})"
-                };
-            }
-
-            _cache[methodSignature] = (details, DateTime.UtcNow);
-            return details;
         }
 
         /// <summary>
