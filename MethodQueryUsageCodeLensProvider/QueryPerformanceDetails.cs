@@ -54,9 +54,9 @@ namespace MethodQueryUsageCodeLensProvider
 
         public override string ToString()
         {
-            return $"{QueryCount} Query's logged | "
-                 + $"{ValueFormatHelper.BytesToReadableStringDouble(TotalBytes_Total)} Processed bytes | "
-                 + $"{UniqueUserCount} Unique Users";
+            return $"{QueryCount} query's logged | "
+                 + $"{ValueFormatHelper.BytesToReadableStringDouble(TotalBytes_Total)} processed | "
+                 + $"{UniqueUserCount} unique users";
         }
     }
 
